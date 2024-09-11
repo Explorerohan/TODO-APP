@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('https://images.unsplash.com/photo-1476272686930-20430cc04f91?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fG1vdG9pdmF0aW9ufGVufDB8fHx8MTY4MzQ2Nzg4OA&ixlib=rb-1.2.1&q=80&w=1080');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .task-card:hover {
+            transform: scale(1.02);
+            transition: transform 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gray-900 bg-opacity-50">
+    <div class="bg-white bg-opacity-95 rounded-xl shadow-xl p-8 w-full max-w-2xl">
+        <h1 class="text-4xl font-extrabold text-gray-900 text-center mb-8">📋 My To-Do List</h1>
+        
+        <!-- Form for Adding Tasks -->
+        <form method="post" id="todoForm">
+            {% csrf_token %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Task Input -->
+                <input type="text" name="add-todo" id="todoInput" placeholder="Add new task..." 
+                    class="col-span-2 px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+                
+                <!-- Due Date Input -->
+                <input type="date" name="due-date" id="dueDate" 
+                    class="px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+
+                <!-- Priority Dropdown -->
+                <select id="priority" name="priority" 
+                    class="px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+                    <option value="" disabled selected>Priority</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+
+                <!-- Add Button -->
+                <button type="submit" class="col-span-2 bg-indigo-600 text-white font-semibold px-4 py-3 rounded-lg shadow-lg hover:bg-indigo-700 transition">
+                    ➕ Add Task
+                </button>
+            </div>
+        </form>
+
+        <!-- Task List -->
+        <ul id="todoList" class="space-y-6 mt-8">
+            {% for task in tasks %}
+            <li class="task-card bg-gradient-to-r from-white to-gray-100 border-l-8 
+                {% if task.priorities == 'High' %} border-red-500 
+                {% elif task.priorities == 'Medium' %} border-yellow-500 
+                {% else %} border-green-500 
+                {% endif %} 
+                rounded-xl shadow-lg p-5 flex items-center justify-between transform transition duration-300">
+                
+                <div class="flex-1">
+                    <h3 class="font-semibold text-xl text-gray-800 mb-2">{{ task.task }}</h3>
+                    <p class="text-gray-600 text-sm">🗓️ Due: <span class="font-medium">{{ task.date }}</span></p>
+                    
+                    <p class="text-sm font-medium mt-1 
+                        {% if task.priorities == 'High' %} text-red-500 
+                        {% elif task.priorities == 'Medium' %} text-yellow-500 
+                        {% else %} text-green-500 
+                        {% endif %}">
+                        🔥 Priority: {{ task.priorities }}
+                    </p>
+                </div>
+
+                <!-- Timer Placeholder (Can add timer logic here) -->
+                <div class="text-right">
+                    <p class="text-gray-700 text-sm font-medium">⏳ Time Left:</p>
+                    <p class="font-semibold text-indigo-600">1d 5h 30m</p>
+                </div>
+            </li>
+            {% empty %}
+            <li class="text-center text-gray-600 text-lg">No tasks added yet. Let's get started!</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+        // Form validation function
+        document.getElementById('todoForm').addEventListener('submit', function(event) {
+            const taskInput = document.getElementById('todoInput').value.trim();
+            const dueDate = document.getElementById('dueDate').value;
+            const priority = document.getElementById('priority').value;
+
+            if (taskInput === "" || dueDate === "" || priority === "") {
+                alert("Please fill out all fields before adding a task.");
+                event.preventDefault();  // Prevent form submission
+            }
+        });
+    </script>
+</body>
+</html>
