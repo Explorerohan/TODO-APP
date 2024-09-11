@@ -12,9 +12,28 @@
             background-position: center;
             background-repeat: no-repeat;
         }
+        .task-card {
+            position: relative; /* Allows absolute positioning of child elements */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px; /* Adjust padding as needed */
+            overflow: hidden; /* Ensures content does not overflow */
+            background: linear-gradient(to bottom, #ffffff, #f5f5f5);
+            border-left: 8px solid; /* Border color will be set dynamically */
+        }
         .task-card:hover {
             transform: scale(1.02);
             transition: transform 0.2s ease-in-out;
+        }
+        .time-left {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+            border-bottom-left-radius: 12px; /* Rounded bottom-left corner */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -33,6 +52,10 @@
                 <!-- Due Date Input -->
                 <input type="date" name="due-date" id="dueDate" 
                     class="px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+                
+                <!-- Time Input -->
+                <input type="time" name="due-time" id="dueTime" 
+                    class="px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ease-in-out duration-150">
 
                 <!-- Priority Dropdown -->
                 <select id="priority" name="priority" 
@@ -45,7 +68,7 @@
 
                 <!-- Add Button -->
                 <button type="submit" class="col-span-2 bg-indigo-600 text-white font-semibold px-4 py-3 rounded-lg shadow-lg hover:bg-indigo-700 transition flex items-center justify-center">
-                    <span class="text-2xl text-white mr-2" style="color: white;">+</span> <!-- White color and increased size -->
+                    <span class="text-2xl text-white mr-2">+</span>
                     Add Task
                 </button>
                 
@@ -55,36 +78,78 @@
         <!-- Task List -->
         <ul id="todoList" class="space-y-6 mt-8">
             {% for task in tasks %}
-            <li class="task-card bg-gradient-to-r from-white to-gray-100 border-l-8 
+            <li class="task-card 
                 {% if task.priorities == 'High' %} border-red-500 
                 {% elif task.priorities == 'Medium' %} border-yellow-500 
                 {% else %} border-green-500 
                 {% endif %} 
-                rounded-xl shadow-lg p-5 flex items-center justify-between transform transition duration-300">
+                rounded-xl shadow-lg transform transition duration-300">
                 
-                <div class="flex-1">
-                    <h3 class="font-semibold text-xl text-gray-800 mb-2">{{ task.task }}</h3>
-                    <p class="text-gray-600 text-sm">🗓️ Due: <span class="font-medium">{{ task.date }}</span></p>
+                <div class="flex flex-col h-full">
+                    <div class="flex flex-col mb-2">
+                        <!-- Task Details -->
+                        <div class="flex items-center mb-1">
+                            <span class="font-semibold text-xl text-gray-800 mr-2">🗒️ Task:</span>
+                            <h3 class="font-semibold text-xl text-gray-800">{{ task.task }}</h3>
+                        </div>
+                        
+                        <!-- Due Date and Time -->
+                        <p class="text-gray-600 text-sm mt-1">
+                            🗓️ Due: 
+                            <span class="font-medium">{{ task.date|date:"F j, Y" }}</span> 
+                            {% if task.time %} 
+                                at 
+                                <span class="font-medium">{{ task.time|date:"g:i A" }}</span> 
+                            {% endif %}
+                        </p>
+                        
+                        <!-- Priority -->
+                        <p class="text-sm font-medium mt-1 flex items-center 
+                            {% if task.priorities == 'High' %} text-red-500 
+                            {% elif task.priorities == 'Medium' %} text-yellow-500 
+                            {% else %} text-green-500 
+                            {% endif %}">
+                            🔥Priority: {{ task.priorities }}
+                        </p>
+                    </div>
                     
-                    <p class="text-sm font-medium mt-1 
-                        {% if task.priorities == 'High' %} text-red-500 
-                        {% elif task.priorities == 'Medium' %} text-yellow-500 
-                        {% else %} text-green-500 
-                        {% endif %}">
-                        🔥 Priority: {{ task.priorities }}
-                    </p>
-                </div>
+                    <!-- Time Left Display -->
+                    <div class="time-left">
+                        <p class="text-gray-700 text-sm font-medium">⏳ Time Left:</p>
+                        <p class="font-semibold text-indigo-600">{{ task.time_left }}</p>
+                    </div>
 
-                <!-- Timer Placeholder (Can add timer logic here) -->
-                <div class="text-right">
-                    <p class="text-gray-700 text-sm font-medium">⏳ Time Left:</p>
-                    <p class="font-semibold text-indigo-600">{{ task.time_left }}</p>
+                    <!-- Button Area -->
+                    <div class="mt-auto flex justify-between">
+                        <!-- Complete Button -->
+                        <form>
+                            {% csrf_token %}
+                            <button type="submit" class="bg-green-500 text-white font-bold px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                                ✔
+                            </button>
+                        </form>
+                        <form>
+                            {% csrf_token %}
+                            <button type="submit" class="bg-blue-500 text-white font-bold px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                                ↻
+                            </button>
+                        </form>
+
+                        <!-- Delete Button -->
+                        <form>
+                            {% csrf_token %}
+                            <button type="submit" class="bg-red-500 text-white font-bold px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                                ⛔
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </li>
             {% empty %}
             <li class="text-center text-gray-600 text-lg">No tasks added yet. Let's get started!</li>
             {% endfor %}
         </ul>
+        
     </div>
 
     <script>
@@ -92,9 +157,10 @@
         document.getElementById('todoForm').addEventListener('submit', function(event) {
             const taskInput = document.getElementById('todoInput').value.trim();
             const dueDate = document.getElementById('dueDate').value;
+            const dueTime = document.getElementById('dueTime').value;
             const priority = document.getElementById('priority').value;
 
-            if (taskInput === "" || dueDate === "" || priority === "") {
+            if (taskInput === "" || dueDate === "" || dueTime === "" || priority === "") {
                 alert("Please fill out all fields before adding a task.");
                 event.preventDefault();  // Prevent form submission
             }
