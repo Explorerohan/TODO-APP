@@ -59,3 +59,8 @@ def calculate_time_left(due_date):
     minutes, _ = divmod(remainder, 60)
 
     return f"{days}d {hours}h {minutes}m"
+
+def delete_task(request,id):
+    task = Todo.objects.get(id=id)
+    task.delete()
+    return redirect('/')

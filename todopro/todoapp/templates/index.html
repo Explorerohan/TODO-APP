@@ -138,9 +138,9 @@
                         <!-- Delete Button -->
                         <form>
                             {% csrf_token %}
-                            <button type="submit" class="bg-red-500 text-white font-bold px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                            <a href='/delete/{{task.id}}' class="bg-red-500 text-white font-bold px-4 py-2 rounded-lg hover:bg-red-600 transition">
                                 ⛔
-                            </button>
+                            </a>
                         </form>
                     </div>
                 </div>
