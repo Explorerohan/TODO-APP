@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('https://img.freepik.com/premium-vector/abstract-waving-aesthetic-pastel-background-with-flower_545556-616.jpg?semt=ais_hybrid');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .task-card {
+            position: relative; /* Allows absolute positioning of child elements */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px; /* Adjust padding as needed */
+            overflow: hidden; /* Ensures content does not overflow */
+            background: linear-gradient(to bottom, #ffffff, #f5f5f5);
+            border-left: 8px solid; /* Border color will be set dynamically */
+        }
+        .task-card:hover {
+            transform: scale(1.02);
+            transition: transform 0.2s ease-in-out;
+        }
+        .time-left {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+            border-bottom-left-radius: 12px; /* Rounded bottom-left corner */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gray-900 bg-opacity-50">
+    <div class="bg-white bg-opacity-95 rounded-xl shadow-xl p-8 w-full max-w-2xl">
+        <h1 class="text-4xl font-extrabold text-gray-900 text-center mb-8">📋 My To-Do List</h1>
+        
+        <!-- Form for Adding Tasks -->
+        <form method="post" id="todoForm">
+            {% csrf_token %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Task Input -->
+                <input type="text" name="add-todo" id="todoInput" value="{{task.task}}" class="col-span-2 px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+                
+                <!-- Due Date Input -->
+                <input type="date" name="due-date" id="dueDate" class="px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+                
+                <!-- Time Input -->
+                <input type="time" name="due-time" id="dueTime" class="px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+
+                <!-- Priority Dropdown -->
+                <select id="priority" name="priority" class="px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ease-in-out duration-150">
+                    <option value="" disabled selected>Priority</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+
+                <!-- Add Button -->
+                <button type="submit" class="col-span-2 bg-indigo-600 text-white font-semibold px-4 py-3 rounded-lg shadow-lg hover:bg-indigo-700 transition flex items-center justify-center">
+                    <span class="text-2xl text-white mr-2">+</span>
+                    Edit Task
+                </button>
+                
+            </div>
+        </form>
+</body>
+</html>

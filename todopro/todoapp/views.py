@@ -64,3 +64,23 @@ def delete_task(request,id):
     task = Todo.objects.get(id=id)
     task.delete()
     return redirect('/')
+
+
+def edit_task(request,id):
+    update = Todo.objects.get(id=id)
+    if request.method == 'POST':
+        data = request.POST
+        update.task = data.get('add-todo')
+        date = data.get('due-date')
+        time = data.get('due-time')
+        priorities = data.get('priority')
+        if date:
+            update.date = date
+        if time:
+            update.time = time
+        if priorities:
+            update.priorities = priorities
+        update.save()
+        return redirect('/')
+    return render(request,'edit_task.html',{'task':update})
+    

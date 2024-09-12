@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            background-image: url('https://images.unsplash.com/photo-1476272686930-20430cc04f91?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fG1vdG9pdmF0aW9ufGVufDB8fHx8MTY4MzQ2Nzg4OA&ixlib=rb-1.2.1&q=80&w=1080');
+            background-image: url('https://img.freepik.com/premium-vector/abstract-waving-aesthetic-pastel-background-with-flower_545556-616.jpg?semt=ais_hybrid');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -130,12 +130,10 @@
                         </form>
                         <form>
                             {% csrf_token %}
-                            <button type="submit" class="bg-blue-500 text-white font-bold px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                            <a href="/edit/{{task.id}}" class="bg-blue-500 text-white font-bold px-4 py-2 rounded-lg hover:bg-blue-600 transition">
                                 ↻
-                            </button>
+                            </a>
                         </form>
-
-                        <!-- Delete Button -->
                         <form>
                             {% csrf_token %}
                             <a href='/delete/{{task.id}}' class="bg-red-500 text-white font-bold px-4 py-2 rounded-lg hover:bg-red-600 transition">
