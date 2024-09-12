@@ -75,6 +75,11 @@
             </div>
         </form>
 
+        <br>
+        <hr>
+        <h3 class="text-2xl font-extrabold text-gray-900 text-center mb-8">🎯 Task To Complete</h3>
+
+
         <!-- Task List -->
         <ul id="todoList" class="space-y-6 mt-8">
             {% for task in tasks %}
@@ -89,7 +94,7 @@
                     <div class="flex flex-col mb-2">
                         <!-- Task Details -->
                         <div class="flex items-center mb-1">
-                            <span class="font-semibold text-xl text-gray-800 mr-2">🗒️ Task:</span>
+                            <span class="font-semibold text-xl text-gray-800 mr-2">🎯 Task:</span>
                             <h3 class="font-semibold text-xl text-gray-800">{{ task.task }}</h3>
                         </div>
                         
@@ -124,9 +129,9 @@
                         <!-- Complete Button -->
                         <form>
                             {% csrf_token %}
-                            <button type="submit" class="bg-green-500 text-white font-bold px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                            <a href="/completed/{{task.id}}" type="submit" class="bg-green-500 text-white font-bold px-4 py-2 rounded-lg hover:bg-green-600 transition">
                                 ✔
-                            </button>
+                            </a>
                         </form>
                         <form>
                             {% csrf_token %}
@@ -148,6 +153,31 @@
             {% endfor %}
         </ul>
         
+        <br>
+        <hr>
+        <!-- New Section: Completed Tasks -->
+        <h3 class="text-2xl font-extrabold text-gray-900 text-center mb-8">✅ Completed Tasks</h3>
+        <ul class="space-y-6 mt-8">
+            {% for task in completed_tasks %}
+            <li class="task-card bg-gray-100 text-gray-500 border-green-500 rounded-xl shadow-lg transform transition duration-300">
+                <div class="flex flex-col h-full">
+                    <div class="flex flex-col mb-2">
+                        <!-- Task Details -->
+                        <div class="flex items-center mb-1">
+                            <span class="font-semibold text-xl text-gray-800 mr-2">🎯 Task:</span>
+                            <h3 class="font-semibold text-xl text-gray-800">{{ task.task }}</h3>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-1">
+                            🗓️ Completed on: 
+                            {% comment %} <span class="font-medium">{{ task.date|date:"F j, Y" }}</span> {% endcomment %}
+                        </p>
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+            <li class="text-center text-gray-600 text-lg">No tasks completed yet.</li>
+            {% endfor %}
+        </ul>
     </div>
 
     <script>

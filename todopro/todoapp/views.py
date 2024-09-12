@@ -13,14 +13,13 @@ def add_todo(request):
         time = data.get('due-time') 
         priorities = data.get('priority')
         
-        Todo.objects.create(task=task, date=date,time=time, priorities=priorities)
+        Todo.objects.create(task=task, date=date,time=time, priorities=priorities, is_completed=False)
         return redirect('/')
 
-    queryset = Todo.objects.all()
-    context = {'tasks': queryset}
 
+    tasks = Todo.objects.filter(is_completed=False)
     # Calculate the exact time left for each task
-    for task in queryset:
+    for task in tasks:
         if task.date and task.time:
             due_datetime = datetime.combine(task.date, task.time)
             now = datetime.now()
@@ -40,8 +39,13 @@ def add_todo(request):
                     task.time_left = f"{minutes_left} minutes"
         else:
             task.time_left = "Incomplete date/time information"
+    
+    completed_tasks = Todo.objects.filter(is_completed=True)
 
-    return render(request, 'index.html', context)
+    return render(request, 'index.html', {
+        'tasks': tasks,
+        'completed_tasks': completed_tasks
+    })
 
 
 def calculate_time_left(due_date):
@@ -83,4 +87,10 @@ def edit_task(request,id):
         update.save()
         return redirect('/')
     return render(request,'edit_task.html',{'task':update})
+
+def completed_task(request,id):
+    task = Todo.objects.get(id=id)
+    task.is_completed = True
+    task.save()
+    return redirect('/')
     

@@ -7,3 +7,4 @@ class Todo(models.Model):
     date = models.DateTimeField()
     time = models.TimeField(default=timezone.now)
     priorities = models.CharField(max_length=50)
+    is_completed = models.BooleanField(default=False)
