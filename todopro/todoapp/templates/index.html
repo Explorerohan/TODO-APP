@@ -169,7 +169,7 @@
                         </div>
                         <p class="text-gray-600 text-sm mt-1">
                             🗓️ Completed on: 
-                            {% comment %} <span class="font-medium">{{ task.date|date:"F j, Y" }}</span> {% endcomment %}
+                            <span class="font-medium">{{ task.completed_at|date:"F j, Y, g:i A" }}</span>
                         </p>
                     </div>
                 </div>

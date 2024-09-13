@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import Todo
 from django.utils.timezone import now
+from django.utils import timezone
 from datetime import timedelta,datetime
 # Create your views here.
 from datetime import datetime, timedelta
@@ -13,7 +14,7 @@ def add_todo(request):
         time = data.get('due-time') 
         priorities = data.get('priority')
         
-        Todo.objects.create(task=task, date=date,time=time, priorities=priorities, is_completed=False)
+        Todo.objects.create(task=task, date=date,time=time, priorities=priorities, is_completed=False,completed_at=None)
         return redirect('/')
 
 
@@ -91,6 +92,7 @@ def edit_task(request,id):
 def completed_task(request,id):
     task = Todo.objects.get(id=id)
     task.is_completed = True
+    task.completed_at = timezone.now()
     task.save()
     return redirect('/')
     
