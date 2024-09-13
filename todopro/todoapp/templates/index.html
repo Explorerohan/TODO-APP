@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            background-image: url('https://img.freepik.com/premium-vector/abstract-waving-aesthetic-pastel-background-with-flower_545556-616.jpg?semt=ais_hybrid');
+            background-image: url('https://img.freepik.com/premium-psd/abstract-colorful-gradient-background-psd-modern-windows-desktop-wallpaper-4k-panoramic-size-2022_691560-34.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -86,7 +86,7 @@
             <li class="task-card 
                 {% if task.priorities == 'High' %} border-red-500 
                 {% elif task.priorities == 'Medium' %} border-yellow-500 
-                {% else %} border-green-500 
+                {% else %} border-blue-500 
                 {% endif %} 
                 rounded-xl shadow-lg transform transition duration-300">
                 
@@ -156,28 +156,40 @@
         <br>
         <hr>
         <!-- New Section: Completed Tasks -->
-        <h3 class="text-2xl font-extrabold text-gray-900 text-center mb-8">✅ Completed Tasks</h3>
-        <ul class="space-y-6 mt-8">
-            {% for task in completed_tasks %}
-            <li class="task-card bg-gray-100 text-gray-500 border-green-500 rounded-xl shadow-lg transform transition duration-300">
-                <div class="flex flex-col h-full">
-                    <div class="flex flex-col mb-2">
-                        <!-- Task Details -->
-                        <div class="flex items-center mb-1">
-                            <span class="font-semibold text-xl text-gray-800 mr-2">🎯 Task:</span>
-                            <h3 class="font-semibold text-xl text-gray-800">{{ task.task }}</h3>
-                        </div>
-                        <p class="text-gray-600 text-sm mt-1">
-                            🗓️ Completed on: 
-                            <span class="font-medium">{{ task.completed_at|date:"F j, Y, g:i A" }}</span>
-                        </p>
-                    </div>
+        <!-- New Section: Completed Tasks -->
+<h3 class="text-2xl font-extrabold text-gray-900 text-center mb-8">✅ Completed Tasks</h3>
+<ul class="space-y-6 mt-8">
+    {% for task in completed_tasks %}
+    <li class="task-card bg-gray-100 text-gray-500 border-green-500 rounded-xl shadow-lg transform transition duration-300">
+        <div class="flex flex-col h-full">
+            <div class="flex flex-col mb-2">
+                <!-- Task Details -->
+                <div class="flex items-center mb-1">
+                    <span class="font-semibold text-xl text-gray-800 mr-2">🎯 Task:</span>
+                    <h3 class="font-semibold text-xl text-gray-800">{{ task.task }}</h3>
                 </div>
-            </li>
-            {% empty %}
-            <li class="text-center text-gray-600 text-lg">No tasks completed yet.</li>
-            {% endfor %}
-        </ul>
+                <p class="text-gray-600 text-sm mt-1">
+                    🗓️ Completed on: 
+                    <span class="font-medium">{{ task.completed_at|date:"F j, Y, g:i A" }}</span>
+                </p>
+            </div>
+            
+            <!-- Delete Button -->
+            <div class="mt-auto flex justify-end">
+                <form>
+                    {% csrf_token %}
+                    <a href='/delete/{{task.id}}' class="bg-red-500 text-white font-bold px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                        ⛔ Delete
+                    </a>
+                </form>
+            </div>
+        </div>
+    </li>
+    {% empty %}
+    <li class="text-center text-gray-600 text-lg">No tasks completed yet.</li>
+    {% endfor %}
+</ul>
+
     </div>
 
     <script>
